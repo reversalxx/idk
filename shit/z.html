@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 
+        ZenithX Bypass - Link Bypasser
+        Created by: QoyiSec
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenithX Bypass</title>
+    
+    <!-- Using Inter font because it's clean and modern -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* Base styles - started with mobile first approach */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Header styles - wanted to make it pop */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        h1 {
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.2);
+        }
+        
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 30px;
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+        
+        /* Input section - spent way too much time tweaking this */
+        .input-section {
+            background-color: #111;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
+            border: 1px solid #333;
+            transform: translateY(0);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        .input-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+        }
+        
+        /* Form elements */
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: #eee;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            background-color: #222;
+            color: #fff;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #555;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+        }
+        
+        /* Button styles - went through several iterations */
+        button {
+            background-color: #222;
+            color: white;
+            border: 1px solid #444;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        /* Result display */
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #111;
+            display: none;
+            border: 1px solid #333;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Services section - added this later */
+        .services {
+            background-color: #111;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .services h2 {
+            margin-top: 0;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .service-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .service-item {
+            background-color: #222;
+            color: #ddd;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #333;
+            transition: all 0.3s;
+        }
+        
+        .service-item:hover {
+            background-color: #333;
+            transform: scale(1.05);
+        }
+        
+        /* Animations - because why not */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Loading spinner - copied from an old project */
+        .loader {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin: 10px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Error message - added after user testing */
+        .error {
+            color: #ff6b6b;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ZenithX Bypass</h1>
+        <p class="subtitle">Paste shortened URLs to reveal their original destinations</p>
+    </header>
+    
+    <div class="input-section">
+        <label for="linkdata">Bypass Link</label>
+        <input type="text" id="linkdata" placeholder="https://linkvertise.com/esx">
+        <button id="bypass-button">
+            <span id="button-text">Bypass Link</span>
+            <div class="loader" id="loader"></div>
+        </button>
+        <div class="error" id="error-message"></div>
+        
+        <div class="result" id="result">
+            <strong>Original URL:</strong>
+            <a href="#" id="original-url" target="_blank" style="color: #ccc; text-decoration: none; border-bottom: 1px solid #444;"></a>
+        </div>
+    </div>
+    
+    <div class="services">
+        <h2>Supported Services</h2>
+        <div class="service-list">
+            <div class="service-item">bit.ly</div>
+            <div class="service-item">tinyurl.com</div>
+            <div class="service-item">t.co</div>
+            <div class="service-item">goo.gl</div>
+            <div class="service-item">bs.gd</div>
+            <div class="service-item">buff.ly</div>
+            <div class="service-item">ow.ly</div>
+            <div class="service-item">rebrand.ly</div>
+            <div class="service-item">shorturl.at</div>
+            <div class="service-item">tiny.cc</div>
+            <div class="service-item">cutt.ly</div>
+            <div class="service-item">tt.m</div>
+            <div class="service-item">bl.ink</div>
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById('bypass-button').addEventListener('click', async function() {
+            const link = document.getElementById('shortened-url').value.trim();
+            const resultDiv = document.getElementById('result');
+            const originalUrlLink = document.getElementById('original-url');
+            const buttonText = document.getElementById('button-text');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('error-message');
+            
+            // Reset previous state
+            errorMessage.style.display = 'none';
+            resultDiv.style.display = 'none';
+            
+            // Basic validation
+            if (!link) {
+                showError('Please enter a supported link to bypass');
+                return;
+            }
+            
+            try {
+                // URL validation
+                if (!isValidUrl(link)) {
+                    showError('Please enter a valid http url (include http:// or https://)');
+                    return;
+                }
+                
+                // Show loading state
+                buttonText.style.display = 'none';
+                loader.style.display = 'block';
+                this.disabled = true;
+                
+                // Call API (this should be proxied in production)
+                const response = await bypassUrl(link);
+                
+                if (response && response.destination) {
+                    // Display result
+                    originalUrlLink.textContent = response.destination;
+                    originalUrlLink.href = response.destination;
+                    resultDiv.style.display = 'block';
+                    
+                    // Trigger animation
+                    resultDiv.style.animation = 'none';
+                    void resultDiv.offsetWidth; // Trigger reflow
+                    resultDiv.style.animation = 'fadeIn 0.5s ease-out';
+                } else {
+                    showError('Failed to bypass link. The api might not support this link.');
+                }
+            } catch (error) {
+                console.error('Bypass error:', error);
+                showError('An error occurred while processing your request');
+            } finally {
+                // Reset button state
+                buttonText.style.display = 'inline';
+                loader.style.display = 'none';
+                this.disabled = false;
+            }
+        });
+
+        // Helper function to validate URLs
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (err) {
+                return false;
+            }
+        }
+
+        // Show error message with animation
+        function showError(message) {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            errorMessage.style.animation = 'none';
+            void errorMessage.offsetWidth; // Trigger reflow
+            errorMessage.style.animation = 'fadeIn 0.3s ease-out';
+        }
+
+        // API call function - needs to be moved to backend
+        async function bypassUrl(url) {
+            const  = `${url}`;
+            
+            const response = await fetch('/bypass', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: link })
+                });
+
+                const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            
+            return await response.json();
+        }
+
+        // Add some keyboard accessibility
+        document.getElementById('shortened-url').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('bypass-button').click();
+            }
+        });
+    </script>
+</body>
+</html>
